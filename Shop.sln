@@ -5,11 +5,11 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingWeb", "ShoppingWeb\ShoppingWeb.csproj", "{0A4DC57D-62E0-4CB4-912E-FACCC94C1CD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{6752479C-CEED-4A5A-BFBB-AD213089DC5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{6752479C-CEED-4A5A-BFBB-AD213089DC5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{25A6D5D5-1BB2-4239-9EB2-64A715A012D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{25A6D5D5-1BB2-4239-9EB2-64A715A012D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{221C3987-600F-436F-B95A-C2EAE70C1744}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility", "Utility\Utility.csproj", "{221C3987-600F-436F-B95A-C2EAE70C1744}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

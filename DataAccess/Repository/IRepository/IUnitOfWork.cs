@@ -1,5 +1,4 @@
-﻿using Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository.IRepository
 {
-    public interface ICategory : IRepository<Category>
+    public interface IUnitOfWork
     {
-        void Update(Category obj);
+        ICategory Category { get; }
+        IProduct Product { get; }
+        void Save();
     }
 }

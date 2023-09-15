@@ -25,16 +25,33 @@ namespace DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        T IRepository<T>.Get(Expression<Func<T, bool>> predicate)
+        T IRepository<T>.Get(Expression<Func<T, bool>> predicate, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
             query = query.Where(predicate);
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }
+                , StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return query.FirstOrDefault();
         }
 
-        IEnumerable<T> IRepository<T>.GetAll()
+        // In Case,need to load infor base on foreign Key => Use Eager Loading
+        IEnumerable<T> IRepository<T>.GetAll(string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }
+                , StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return query.ToList();
         }
 

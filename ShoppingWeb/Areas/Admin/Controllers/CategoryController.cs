@@ -5,18 +5,19 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 
 
-namespace ShoppingWeb.Controllers
+namespace ShoppingWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly ICategory _categoryRepo;
-        public CategoryController(ICategory db)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _categoryRepo = db;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            List<Category> categoryList = _categoryRepo.GetAll().ToList();
+            List<Category> categoryList = _unitOfWork.Category.GetAll().ToList();
             return View(categoryList);
         }
         public IActionResult Create()
@@ -28,8 +29,8 @@ namespace ShoppingWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                _categoryRepo.Add(obj);
-                _categoryRepo.Save();
+                _unitOfWork.Category.Add(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "Category Created Successfully";
                 return RedirectToAction("Index");
             }
@@ -38,11 +39,11 @@ namespace ShoppingWeb.Controllers
 
         public IActionResult Edit(int? id)
         {
-            if(id==null || id == 0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
-            Category? category = _categoryRepo.Get(u => u.Id==id);
+            Category? category = _unitOfWork.Category.Get(u => u.Id == id);
             if (category == null) { return NotFound(); }
             return View(category);
         }
@@ -52,34 +53,34 @@ namespace ShoppingWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                _categoryRepo.Update(obj);
-                _categoryRepo.Save();
-                TempData["success"] = "Category Updated Successfully"; 
+                _unitOfWork.Category.Update(obj);
+                _unitOfWork.Save();
+                TempData["success"] = "Category Updated Successfully";
                 return RedirectToAction("Index");
             }
             return View();
         }
         public IActionResult Delete(int? id)
         {
-            
+
             if (id == null || id == 0)
             {
                 return NotFound();
             }
-            Category? category = _categoryRepo.Get(u => u.Id == id);
+            Category? category = _unitOfWork.Category.Get(u => u.Id == id);
             if (category == null) { return NotFound(); }
             return View(category);
         }
-        [HttpPost,ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(int? id)
         {
-            Category? cate = _categoryRepo.Get(u => u.Id == id);
+            Category? cate = _unitOfWork.Category.Get(u => u.Id == id);
             if (cate == null)
             {
                 return NotFound();
             }
-            _categoryRepo.Remove(cate);
-            _categoryRepo.Save();
+            _unitOfWork.Category.Remove(cate);
+            _unitOfWork.Save();
             TempData["success"] = "Category Deleted Successfully";
             return RedirectToAction("Index");
         }
