@@ -1,15 +1,17 @@
-﻿using DataAccess.Data;
-using DataAccess.Repository.IRepository;
+﻿using DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.ViewModels;
+using Utility;
 
 namespace ShoppingWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ProductController : Controller {
+    [Authorize(Roles = SD.Role_Admin)]
+    public class ProductController : Controller
+    {
 
         #region DI
         private readonly IUnitOfWork _unitOfWork;
@@ -154,12 +156,12 @@ namespace ShoppingWeb.Areas.Admin.Controllers
 
         public IActionResult GetAll()
         {
-           
+
             List<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
             return Json(new { data = productList });
         }
 
-        //[HttpDelete]
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
             Product product = _unitOfWork.Product.Get(u => u.Id == id);
@@ -167,7 +169,8 @@ namespace ShoppingWeb.Areas.Admin.Controllers
             {
                 return Json(new
                 {
-                    success = false, message = "Error while deleting"
+                    success = false,
+                    message = "Error while deleting"
                 });
             }
             var oldImage = Path.Combine(_webHostEnvironment.WebRootPath
@@ -176,7 +179,6 @@ namespace ShoppingWeb.Areas.Admin.Controllers
             {
                 System.IO.File.Delete(oldImage);
             }
-
 
             _unitOfWork.Product.Remove(product);
             _unitOfWork.Save();

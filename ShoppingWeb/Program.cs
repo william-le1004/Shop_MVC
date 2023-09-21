@@ -2,6 +2,9 @@ using DataAccess.Data;
 using DataAccess.Repository;
 using DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +15,29 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                  builder.Configuration.
                  GetConnectionString("DefaultConnection")));
 
+builder.Services.AddRazorPages();
+
+// Chia role and identity User
+builder.Services.AddIdentity<IdentityUser,IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+// add after builder.Services
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    // Cookie settings
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+    options.LoginPath = "/Identity/Account/Login";
+    options.LogoutPath = "/Identity/Account/Logout";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.SlidingExpiration = true;
+});
+
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 
@@ -28,8 +53,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
+ //config to route exactly razor  page
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",

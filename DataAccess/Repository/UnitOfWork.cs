@@ -1,11 +1,5 @@
 ﻿using DataAccess.Data;
 using DataAccess.Repository.IRepository;
-using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
@@ -17,8 +11,8 @@ namespace DataAccess.Repository
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
-            Category  = new CategoryRepository(_db);
-            Product  = new ProductRepository(_db);
+            Category = new CategoryRepository(_db);
+            Product = new ProductRepository(_db);
         }
 
         public void Save()
